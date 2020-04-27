@@ -213,3 +213,205 @@ LeftArm.LineWidth = 4;
 end
 
 end
+
+
+
+% Updated code%
+
+function Hangman()
+clear all
+close all
+clc
+
+fprintf("Welcome to hangman\n");
+fprintf("\n");
+
+DrawNoose();
+
+Used_letters = [];
+
+generate_case = randi(10);
+
+% chooses a word to play with
+%
+switch generate_case
+    case 1
+        word = 'matrices';
+    case 2
+        word = 'eigenvector';
+    case 3
+        word = 'identity';
+    case 4
+        word = 'transpose';
+    case 5
+        word = 'determinant';
+    case 6
+        word = 'algebra';
+    case 7
+        word = 'calculus';
+    case 8
+        word = 'geometry';
+    case 9
+        word = 'matlab';
+    case 10
+        word = 'corona';
+end
+
+AmountWrong = 0; % Counts the amount of wrong guesses
+if (AmountWrong == 6)
+    fprintf("You've lost\n");
+end
+
+
+
+
+TheWordToBeGuessed = lower(word); %Converts to lowercase
+MainString = string(TheWordToBeGuessed); % Converts to string
+Length = length(TheWordToBeGuessed); %Finds the length of the string
+
+AmountOfLetters = isletter(TheWordToBeGuessed);
+String1=[];
+
+for i=1:Length
+    String1 = [String1 '_ '];
+end
+String1
+AmountWrong = 0; % Counts the amount of wrong guesses
+
+
+
+LettersCorrect = 0;
+
+while 1
+%Takes input from player    
+    LetterInput = input('Guess a letter: ','s');
+    TheInputString = string(LetterInput);
+    LowercaseInput = lower(TheInputString);
+    StringFindInput= strfind(MainString,LowercaseInput);
+    InputLengthCorrect = length(StringFindInput);
+    LettersCorrect = LettersCorrect+length(StringFindInput);
+    
+    %Check Input Correct or Incorrect
+    if InputLengthCorrect >= 1
+        for i = 1:length(StringFindInput)
+        clc
+        fprintf('Correct Letter guessed\n')
+        String1(StringFindInput(i))=LowercaseInput; %plug letter in correct position
+        end
+        fprintf('"%s"\n',String1)
+        if Length == LettersCorrect
+            endgame(Length,LettersCorrect,word) %Endgame
+        break
+        end
+    else
+    clc
+    fprintf('Wrong letter\n')
+    fprintf('"%s"\n',String1)
+    AmountWrong= AmountWrong + 1;
+    DrawHangingMan(AmountWrong)
+    if (AmountWrong == 6)
+        endgame(Length,LettersCorrect,word)  %Endgame
+        break
+    end
+    end
+
+end
+
+
+
+
+end
+%_________________________________________________________________________________________________________________
+function DrawNoose()
+
+hold on 
+rectangle('Position', [5 5 5 5],'linewidth',5,'edgecolor','k');
+
+S1= line([9,9],[9,5]);
+S1.Color = 'k'; 
+S1.LineWidth = 4;
+
+S2= line([7.5,9],[9,9]);
+S2.Color = 'k'; 
+S2.LineWidth = 4;
+
+S2= line([7.5,7.5],[8,9]);
+S2.Color = 'k'; 
+S2.LineWidth = 4;
+
+end
+
+
+function DrawHangingMan(AmountWrong)
+
+hold on
+
+if (AmountWrong == 1)
+hold on
+%Draws head
+x=7.5;
+y=7.75;
+r=0.25;
+theta = 0:pi/100:2*pi;
+a= r*cos(theta)+x;
+b=r*sin(theta)+y;
+Head = plot(a,b);
+Head.LineWidth = 4;
+Head.Color = 'b';
+end
+
+if (AmountWrong == 2)
+
+%Draws Body
+hold on
+Body= line([7.5,7.5],[7.5,6]);
+Body.Color = 'b'; 
+Body.LineWidth = 4;
+end
+
+if (AmountWrong == 3)
+%Draws Left Leg
+hold on
+LeftLeg = line([7.5,7],[6,5.5]);
+LeftLeg.Color = 'b'; 
+LeftLeg.LineWidth = 4;
+end
+
+if (AmountWrong == 4)
+%Draws Right Leg
+hold on
+LeftLeg = line([7.5,8],[6,5.5]);
+LeftLeg.Color = 'b'; 
+LeftLeg.LineWidth = 4;
+end
+
+if (AmountWrong == 5)
+%Draws Right Arm
+hold on
+RightArm = line([7.5,7],[7,7.5]);
+RightArm.Color = 'b'; 
+RightArm.LineWidth = 4;
+end
+
+if (AmountWrong == 6)
+%Draws Left Arm
+hold on
+LeftArm = line([7.5,8],[7,7.5]);
+LeftArm.Color = 'b'; 
+LeftArm.LineWidth = 4;
+
+end
+
+end
+
+function endgame(Length,LettersCorrect,word)
+if Length==LettersCorrect
+    fprintf("You've won!!\n");
+else
+    fprintf("You've lost\n");
+    fprintf('"%s"\n',word);
+end
+end
+
+              
+
